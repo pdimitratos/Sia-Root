@@ -8,7 +8,7 @@ namespace Microsoft.EntityFrameworkCore
 {
     public static class ModelBuilderExtensions
     {
-        public static void WithManyToManyAssociation<TLeft, TRight, TAssociation>(this ModelBuilder builder
+        public static void AddManyToManyAssociation<TLeft, TAssociation, TRight>(this ModelBuilder builder
             , Expression<Func<TLeft, IEnumerable<TAssociation>>> associationsFromLeft
             , Expression<Func<TRight, IEnumerable<TAssociation>>> associationsFromRight
             )
@@ -17,15 +17,15 @@ namespace Microsoft.EntityFrameworkCore
             where TRight : class, IEntity
         {
             builder.Entity<TAssociation>()
-                .HasOne(assoc => assoc._left)
+                .HasOne(assoc => assoc.Left)
                 .WithMany(associationsFromLeft)
-                .HasForeignKey(assoc => assoc._leftId);
+                .HasForeignKey(assoc => assoc.LeftId);
             builder.Entity<TAssociation>()
-                .HasOne(assoc => assoc._right)
+                .HasOne(assoc => assoc.Right)
                 .WithMany(associationsFromRight)
-                .HasForeignKey(assoc => assoc._rightId);
+                .HasForeignKey(assoc => assoc.RightId);
             builder.Entity<TAssociation>()
-                .HasKey(assoc => new { assoc._leftId, assoc._rightId });
+                .HasKey(assoc => new { assoc.LeftId, assoc.RightId });
         }
     }
 }
